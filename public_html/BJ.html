@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>BJ</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body{
+                text-align: center;
+                width: 99%;
+                height: 99%;
+                margin: 0;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                -ms-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%); 
+
+            }
+            table
+            {
+                width: 100%;
+                text-align: center;
+                max-height: 25vh;
+            }
+            .daTable{
+                max-width: 100%;
+                overflow: hidden;
+                table-layout:fixed;       
+            }
+
+            .button {
+                width: 15vw;
+                display: inline-block;
+                padding: 15px 25px;
+                font-size: 80%;
+                cursor: pointer;
+                text-align: center;
+                text-decoration: none;
+                outline: none;
+                color: white;
+                background-color: goldenrod;
+                border: none;
+                border-radius: 15px;
+                box-shadow: 0 9px #999;
+            }
+
+            .button:hover {background-color: #3e8e41}
+
+            .button:active {
+                background-color: white;
+                color: goldenrod;
+                box-shadow: 0 5px #666;
+                transform: translateY(4px);
+            }
+
+            button {
+                width: 15vw;
+                display: inline-block;
+                padding: 15px 25px;
+                font-size: 80%;
+                cursor: pointer;
+                text-align: center;
+                text-decoration: none;
+                outline: none;
+                color: white;
+                background-color: goldenrod;
+                border: none;
+                border-radius: 15px;
+                box-shadow: 0 9px #999;
+            }
+
+            button:hover {background-color: #3e8e41}
+
+            button:active {
+                background-color: white;
+                color: goldenrod;
+                box-shadow: 0 5px #666;
+                transform: translateY(4px);
+            }
+            td{
+                max-width: 20px; min-width: 10px; 
+
+            }
+
+            .tablePic{
+                background-image: url("images/table.png");
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: 100% 100%;
+                text-align: center;
+                width: 95%;
+                height: 95%;
+                margin: 0;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                -ms-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+
+            }
+            .elements{
+                /*font-size: 2vh;*/ 
+                margin: 0;
+                position: absolute; 
+                top: 55%;
+                left: 50%;
+                -ms-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+                float: left; width: 100%;
+                overflow: hidden;
+                text-align: center;
+                vertical-align: central;
+            }
+        </style>
+    </head>
+    <body style="background-color: darkgoldenrod;">
+        <script>
+            score = 0;
+            games = 0;
+
+            function play() {
+                while (j !== 0) {
+                    pTable.deleteCell(j + 2);
+                    j--;
+                }
+                while (k !== 0) {
+                    dTable.deleteCell(k + 2);
+                    k--;
+                }
+                var playAgain = "y";
+                var side;
+                var cardNum;
+                var cardSuit;
+                cardExtraNum = 0;
+
+                //Clear all images from previous game
+                var images = document.getElementsByTagName('img');
+                var l = images.length;
+                for (var i = 0; i < l; i++) {
+                    images[0].parentNode.removeChild(images[0]);
+                }
+                //Creating the players original cards
+                var card1 = (card() + " of " + suit());
+                c1Num = parseInt(card1.substr(0, 2).trim());
+                var c1Array = card1.split(" ");
+                var lastWord1 = c1Array[c1Array.length - 1];
+
+                var card2 = (card() + " of " + suit());
+                c2Num = parseInt(card2.substr(0, 2).trim());
+                var c2Array = card2.split(" ");
+                var lastWord2 = c2Array[c2Array.length - 1];
+
+                //Creating the dealers hand
+                dCard1 = (card() + " of " + suit());
+                dCard2 = (card() + " of " + suit());
+                var dC1Array = dCard1.split(" ");
+                lastWordDC1 = dC1Array[dC1Array.length - 1];
+                var dC2Array = dCard2.split(" ");
+                lastWordDC2 = dC2Array[dC2Array.length - 1];
+                dCardTotal = (parseInt(dCard2.substr(0, 2).trim()) +
+                        parseInt(dCard1.substr(0, 2).trim()));
+
+                //printing dealers 2 backsides
+                document.getElementById("g").innerHTML = ("");
+                document.getElementById("dealer").innerHTML = ("<img src=\"images/dealer.jpg\" width=\"43%\" max-height=\"48vh\" >");
+                document.getElementById("d1back").innerHTML = ("<img src=\"images/green_back.png\" id=\"dBack1\" width=\"43%\" max-height=\"48vh\" >");
+                document.getElementById("d2back").innerHTML = ("<img src=\"images/green_back.png\" id=\"dBack2\" width=\"43%\" max-height=\"48vh\" >");
+                document.getElementById("dBack1").src = "images/" + dCard1.substr(0, 2).trim() + lastWordDC1.toString().charAt(0) + ".png";
+
+                //printing players cards
+                document.getElementById("player").innerHTML = ("<img src=\"images/you.png\" width=\"20%\" height=\"20%\" >");
+                document.getElementById("p1").innerHTML = ("<img src=\"images/" + c1Num.toString() + lastWord1.toString().charAt(0) + ".png" + "\" width=\"43%\" max-height=\"48vh\" >");
+                document.getElementById("p2").innerHTML = ("<img src=\"images/" + c2Num.toString() + lastWord2.toString().charAt(0) + ".png" + "\" width=\"43%\" max-height=\"48vh\" >");
+
+                document.getElementById("hit").style = "visibility: visible";
+                document.getElementById("stay").style = "visibility: visible";
+
+            }
+
+            j = 0;
+            k = 0;
+
+            function hitMe() {
+                j++;
+                document.getElementById("playAgain").style = "visibility: hidden";
+                var cardExtra = (card() + " of " + suit());
+                var cardExtraArray = cardExtra.split(" ");
+                var lastWordExtra = cardExtraArray[cardExtraArray.length - 1];
+                cardExtraNum += Number(cardExtra.substr(0, 2).trim());
+                pTable = document.getElementById("pTable");
+                var n = pTable.insertCell(pTable.size);
+                n.innerHTML = ("<img src=\"images/" + cardExtra.substr(0, 2).trim() + lastWordExtra.toString().charAt(0) + ".png" + "\" width=\"43%\" max-height=\"48vh\" >");
+                var total = c1Num + c2Num + cardExtraNum;
+                checkTotal(total);
+            }
+
+            function hitDealer() {
+                k++;
+                var cardExtra = (card() + " of " + suit());
+                var cardExtraArray = cardExtra.split(" ");
+                var lastWordExtra = cardExtraArray[cardExtraArray.length - 1];
+                var cardExtraNum = Number(cardExtra.substr(0, 2).trim());
+                dTable = document.getElementById("dTable");
+                var n = dTable.insertCell(dTable.size);
+                n.innerHTML = ("<img src=\"images/" + cardExtra.substr(0, 2).trim() + lastWordExtra.toString().charAt(0) + ".png" + "\" width=\"43%\" max-height=\"48vh\" >");
+                dCardTotal += cardExtraNum;
+                var tf = checkTotalDealer(dCardTotal);
+                return tf;
+            }
+
+            function checkTotalDealer(dCardTotal) {
+                if (dCardTotal < 16) {
+                    hitDealer();
+                } else if (dCardTotal > 21) {
+                    alert("Dealer Busted: " + dCardTotal + "\n YOU WIN!");
+                    return newGame();
+                }
+                return true;
+            }
+
+            function checkTotal(total)
+            {
+                if (total > 21) {
+                    alert("Your total: " + total + "\n" +
+                            "YOU LOSE!");
+                    newGame();
+
+                }
+            }
+            function newGame()
+            {
+                games++;
+
+                document.getElementById("hit").style = "visibility: hidden";
+                document.getElementById("stay").style = "visibility: hidden";
+                document.getElementById("playAgain").style = "visibility: visible";
+                document.getElementById("score").innerHTML = ("Score: " + score + " out of " + games);
+
+            }
+
+
+            function stayMe() {
+                checkTotalDealer(dCardTotal);
+                document.getElementById("dBack2").src = "images/" + dCard2.substr(0, 2).trim() + lastWordDC2.toString().charAt(0) + ".png";
+                var total = c1Num + c2Num + cardExtraNum;
+
+                if (dCardTotal > 21) {
+                    score++;
+                    return "hi";
+                }
+
+                //The case of nobody busts
+                if (dCardTotal > total) {
+                    alert("Your total: " + total + "\n" + "Dealers total: " + dCardTotal + "\n YOU LOSE!");
+                } else if (dCardTotal === total) {
+                    alert("Your total: " + total + "\n" + "Dealers total: " + dCardTotal + "\n TIE!");
+                    score++;
+                } else {
+                    alert("Your total: " + total + "\n" + "Dealers total: " + dCardTotal + "\n YOU WIN!");
+                    score++;
+                }
+
+                newGame();
+
+
+            }
+
+
+            function suit() {
+                var ranSuit = parseInt(Math.random() * 4); //random suit (0-3)
+
+                //Names the Random Suit
+                switch (ranSuit) {
+                    case 0:
+                        return "Spades";
+                        break;
+                    case 1:
+                        return "Clubs";
+                        break;
+                    case 2:
+                        return "Diamonds";
+                        break;
+                    case 3:
+                        return "Hearts";
+                        break;
+                }
+            }
+            function card() {
+                var ranNum = parseInt((Math.random() * (12 - 2)) + 2); // random # from 2-11
+                return ranNum;
+            }
+        </script> 
+        <div class="tablePic"> 
+            <div class = "elements">
+                <div id="cardTable" class="daTable">
+
+                    <div id="g" >
+                        <p><input class="button" type="button" id="play" value="begin" onclick="play()" /></p>
+                    </div>
+
+                    <table>
+                        <tr id="dTable">
+                            <td  id="dealer">&nbsp;</td>
+                            <td  id="d1back">&nbsp;</td>
+                            <td  id="d2back">&nbsp;</td>
+                        </tr>
+                    </table>
+                    <table >
+                        <tr id="pTable">
+                            <td id="player">&nbsp;</td>
+                            <td id="p1">&nbsp;</td>
+                            <td id="p2">&nbsp;</td>
+                        </tr>
+                    </table>
+
+                </div>
+                <br/> <br/>
+                <div>
+                    <table>
+                        <tr>
+                            <td><button id="hit" style=" visibility: hidden" onclick="hitMe();"> Hit </button></td>
+                            <td><button id="stay" style=" visibility: hidden" onclick="stayMe();"> Stay </button></td>
+                            <td><button id="playAgain" style=" visibility: hidden" onclick="play();" > Play again? </button></td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <h3  id="score">Score: 0</h3>
+                </div>
+            </div>
+        </div>
+    </body> 
+</html>
